@@ -1,7 +1,7 @@
 #include <ros/ros.h> //ALWAYS need to include this
-#include <gazebo_msgs/GetModelState.h>
-#include <gazebo_msgs/ApplyJointEffort.h>
-#include <gazebo_msgs/GetJointProperties.h>
+#include <gazebo_msgs/GetModelState.h> // service msg
+#include <gazebo_msgs/ApplyJointEffort.h> //service msg
+#include <gazebo_msgs/GetJointProperties.h> //service msg
 #include <sensor_msgs/JointState.h>
 #include <string.h>
 #include <stdio.h>  
@@ -88,9 +88,11 @@ int main(int argc, char **argv) {
     ros::Duration duration(dt);
     ros::Rate rate_timer(1 / dt);
 
+    // Interact with services
     effort_cmd_srv_msg.request.joint_name = "joint1";
     effort_cmd_srv_msg.request.effort = 0.0;
     effort_cmd_srv_msg.request.duration = duration;
+
     get_joint_state_srv_msg.request.joint_name = "joint1";
 
     // set up the joint_state_msg fields to define a single joint,
@@ -101,16 +103,19 @@ int main(int argc, char **argv) {
     joint_state_msg.velocity.push_back(0.0);
     
     //here is the main controller loop:
-    while (ros::ok()) { 
+    while (ros::ok()) {
+      // Get joint pos from service, and publish pos
         get_jnt_state_client.call(get_joint_state_srv_msg);
         q1 = get_joint_state_srv_msg.response.position[0];
         q1_msg.data = q1;
         pos_publisher.publish(q1_msg); //republish his val on topic jnt_pos
 
+	// Get joint vel from service and publish vel
         q1dot = get_joint_state_srv_msg.response.rate[0];
         q1dot_msg.data = q1dot;
         vel_publisher.publish(q1dot_msg);
 
+	// Publish joint states
         joint_state_msg.header.stamp = ros::Time::now();
         joint_state_msg.position[0] = q1;
         joint_state_msg.velocity[0] = q1dot;

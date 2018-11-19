@@ -13,21 +13,15 @@ int main(int argc, char **argv) {
     // any message published on a ROS topic must have a pre-defined format, 
     // so subscribers know how to interpret the serialized data transmission
    
-   ros::Rate naptime(1.0); //create a ros object from the ros “Rate” class; 
-   //set the sleep timer for 1Hz repetition rate (arg is in units of Hz)
+   ros::Rate naptime(1.0); 
+
 
     input_float.data = 0.0;
     
-    // do work here in infinite loop (desired for this example), but terminate if detect ROS has faulted
     while (ros::ok()) 
     {
-        // this loop has no sleep timer, and thus it will consume excessive CPU time
-        // expect one core to be 100% dedicated (wastefully) to this small task
-        input_float.data = input_float.data + 0.001; //increment by 0.001 each iteration
-        my_publisher_object.publish(input_float); // publish the value--of type Float64-- 
-        //to the topic "topic1"
-	//the next line will cause the loop to sleep for the balance of the desired period 
-        // to achieve the specified loop frequency 
+        input_float.data = input_float.data + 0.001; 
+        my_publisher_object.publish(input_float); 
 	naptime.sleep(); 
     }
 }

@@ -1,3 +1,8 @@
+// timer_client: works together with action server called "timer_action"
+// in source: example_action_server_w_fdbk.cpp
+// this code could be written using classes instead (e.g. like the corresponding server)
+//  see: http://wiki.ros.org/actionlib_tutorials/Tutorials/Writing%20a%20Callback%20Based%20Simple%20Action%20Client
+
 #include<ros/ros.h>
 #include <actionlib/client/simple_action_client.h>
 #include<example_action_server/demoAction.h> //reference action message in this package
@@ -8,6 +13,8 @@ bool g_goal_active = false; //some global vars for communication with callbacks
 int g_result_output = -1;
 int g_fdbk = -1;
 
+// This function will be called once when the goal completes
+// this is optional, but it is a convenient way to get access to the "result" message sent by the server
 void doneCb(const actionlib::SimpleClientGoalState& state,
         const example_action_server::demoResultConstPtr& result) {
     ROS_INFO(" doneCb: server responded with state [%s]", state.toString().c_str());
@@ -16,11 +23,14 @@ void doneCb(const actionlib::SimpleClientGoalState& state,
     g_goal_active=false;
 }
 
+//this function wakes up every time the action server has feedback updates for this client
+// only the client that sent the current goal will get feedback info from the action server
 void feedbackCb(const example_action_server::demoFeedbackConstPtr& fdbk_msg) {
     ROS_INFO("feedback status = %d",fdbk_msg->fdbk);
     g_fdbk = fdbk_msg->fdbk; //make status available to "main()"
 }
 
+// Called once when the goal becomes active; not necessary, but could be useful diagnostic
 void activeCb()
 {
   ROS_INFO("Goal just went active");

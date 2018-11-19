@@ -1,7 +1,4 @@
-//example pgm to set a model state in Gazebo
-// could also do w/ rosservice call gazebo/set_model_state
 #include <ros/ros.h> //ALWAYS need to include this
-//#include <gazebo_msgs/SetModelState.h>
 #include <gazebo_msgs/ModelState.h>
 #include <gazebo_msgs/SetModelState.h>
 #include <string.h>

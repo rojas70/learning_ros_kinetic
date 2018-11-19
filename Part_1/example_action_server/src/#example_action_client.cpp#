@@ -29,13 +29,11 @@ int main(int argc, char** argv) {
 
     while (true) {
         g_count++;
-        goal.input = g_count; // this merely sequentially numbers the goals sent
-        //action_client.sendGoal(goal); // simple example--send goal, but do not specify callbacks
-        action_client.sendGoal(goal, &doneCb); // we could also name additional callback functions here, if desired
-        //    action_client.sendGoal(goal, &doneCb, &activeCb, &feedbackCb); //e.g., like this
+        goal.input = g_count;
+        action_client.sendGoal(goal, &doneCb); 
 
         bool finished_before_timeout = action_client.waitForResult(ros::Duration(5.0));
-        //bool finished_before_timeout = action_client.waitForResult(); // wait forever...
+	
         if (!finished_before_timeout) {
             ROS_WARN("giving up waiting on result for goal number %d", g_count);
             return 0;
