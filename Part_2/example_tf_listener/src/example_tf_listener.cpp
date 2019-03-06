@@ -1,9 +1,3 @@
-//example_tf_listener.cpp:
-//wsn, March 2016
-//illustrative node to show use of tf listener, with reference to the simple mobile-robot model
-// specifically, frames: odom, base_frame, link1 and link2
-
-// this header incorporates all the necessary #include files and defines the class "DemoTfListener"
 #include "example_tf_listener.h"
 using namespace std;
 
@@ -38,6 +32,7 @@ int main(int argc, char** argv) {
     cout << endl << "extracted tf: " << endl;
     demoTfListener.printTf(tfBaseToLink2);
 
+    // Find Alternative Path
     altTfBaseToLink2 = tfBaseToLink1*tfLink1ToLink2;
     cout << endl << "result of multiply tfBaseToLink1*tfLink1ToLink2: " << endl;
     demoTfListener.printTf(altTfBaseToLink2);
