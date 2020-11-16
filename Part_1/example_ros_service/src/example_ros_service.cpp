@@ -41,7 +41,7 @@ int main(int argc, char **argv)
 
   ros::ServiceServer service = n.advertiseService("lookup_by_name", callback);
 
-  ROS_INFO("Ready to look up names.");
+  ROS_INFO("Service server is ready to look up names....");
 
   ros::spin();
 

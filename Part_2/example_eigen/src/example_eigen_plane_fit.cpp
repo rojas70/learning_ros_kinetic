@@ -28,7 +28,7 @@ int main(int argc, char** argv) {
     //xxxxxxxxxxxxxxxxxx  NORMALLY, THIS DATA WOULD COME FROM TOPICS OR FROM GOALS xxxxxxxxx
     // define a plane and generate some points on that plane
     // the plane can be defined in terms of a normal vector and a distance from the origin
-    Eigen::Vector3d normal_vec(1,2,3); // here is an arbitrary normal vector, initialized to (1,2,3) upon instantiation
+    Eigen::Vector3d normal_vec(0,0,1); // here is an arbitrary normal vector, initialized to (1,2,3) upon instantiation
     ROS_INFO("creating example noisy, planar data...");
     cout<<"normal: "<<normal_vec.transpose()<<endl; //.transpose() is so I can display the components on the same line, instead of as a column
     normal_vec/=normal_vec.norm(); // make this vector unit length

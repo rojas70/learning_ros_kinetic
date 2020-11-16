@@ -3,6 +3,9 @@ project(xform_utils)
 
 find_package(catkin_simple REQUIRED)
 
+# Use C++11
+set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
+
 #uncomment next line to use OpenCV library
 #find_package(OpenCV REQUIRED)
 

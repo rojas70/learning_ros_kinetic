@@ -7,10 +7,12 @@
 #include <baxter_trajectory_streamer/baxter_trajectory_streamer.h>
 
 #include<baxter_trajectory_streamer/trajAction.h>
+
 using namespace std;
 #define VECTOR_DIM 7 // e.g., a 7-dof vector
 
 int g_done_count=0;
+
 void rightArmDoneCb(const actionlib::SimpleClientGoalState& state,
         const baxter_trajectory_streamer::trajResultConstPtr& result) {
     ROS_INFO(" rtArmDoneCb: server responded with state [%s]", state.toString().c_str());
@@ -19,10 +21,10 @@ void rightArmDoneCb(const actionlib::SimpleClientGoalState& state,
 }
 
 void leftArmDoneCb(const actionlib::SimpleClientGoalState& state,
-        const baxter_trajectory_streamer::trajResultConstPtr& result) {
+		   const baxter_trajectory_streamer::trajResultConstPtr& result) {
     ROS_INFO(" leftArmDoneCb: server responded with state [%s]", state.toString().c_str());
     ROS_INFO("got return val = %d", result->return_val);
-        g_done_count++;
+    g_done_count++;
 }
 
 int main(int argc, char** argv) {
@@ -34,7 +36,7 @@ int main(int argc, char** argv) {
     std::vector<Eigen::VectorXd> des_path_right, des_path_left;
     trajectory_msgs::JointTrajectory des_trajectory_right,des_trajectory_left; // empty trajectories     
     
-    //here are hard-coded joint angles for left and right arm poses
+    // Hard-coded joint angles for left and right arm poses
     cout<<"setting pre-poses: "<<endl;
     q_pre_pose_right.resize(7);
     q_pre_pose_left.resize(7);
@@ -46,16 +48,19 @@ int main(int argc, char** argv) {
     //cout<<"enter 1";
     //int ans;
     //cin>>ans;
+
+    // Instantiate a Baxter_traj_streamer object and pass in pointer to nodehandle for constructor to use  
     ROS_INFO("instantiating a traj streamer");
-    Baxter_traj_streamer baxter_traj_streamer(&nh); //instantiate a Baxter_traj_streamer object and pass in pointer to nodehandle for constructor to use  
+    Baxter_traj_streamer baxter_traj_streamer(&nh); 
+
     // warm up the joint-state callbacks; want to make sure the joint states are valid
-    cout << "warming up callbacks..." << endl;
+    cout << "Warming up callbacks..." << endl;
     for (int i = 0; i < 100; i++) {
         ros::spinOnce();  //the baxter_traj_streamer needs spins for its updates
         ros::Duration(0.01).sleep();
     }
 
-    //get current pose of left and right arms:
+    // Get current pose of left and right arms:
     cout<<"right arm is at: "<<baxter_traj_streamer.get_q_vec_right_arm_Xd().transpose()<<endl;
     //cout<<"enter 1";
     //cin>>ans;    

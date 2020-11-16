@@ -10,13 +10,13 @@
 // where fname_right.jsp and fname_left.jsp are desired right and left-arm playfile names
 // optionally, just give a single playfile name, which will be interpreted as the right-arm file
 
-#include<ros/ros.h>
+#include <ros/ros.h>
 #include <actionlib/client/simple_action_client.h>
 #include <actionlib/client/terminal_state.h>
 #include <baxter_trajectory_streamer/baxter_trajectory_streamer.h>
 
 #include <std_msgs/UInt32.h>
-#include<baxter_trajectory_streamer/trajAction.h>
+#include <baxter_trajectory_streamer/trajAction.h>
 using namespace std;
 #define VECTOR_DIM 7 // e.g., a 7-dof vector
 

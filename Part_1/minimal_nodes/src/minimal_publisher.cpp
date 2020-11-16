@@ -4,7 +4,7 @@
 int main(int argc, char **argv) {
     ros::init(argc, argv, "minimal_publisher");
     
-    ros::NodeHandle n;
+    ros::NodeHandle n("test");
     
     ros::Publisher my_publisher_object = n.advertise<std_msgs::Float64>("topic1", 1);
         

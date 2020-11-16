@@ -9,23 +9,16 @@ using namespace std;
 DemoTfListener::DemoTfListener(ros::NodeHandle* nodehandle):nh_(*nodehandle)
 { 
     ROS_INFO("in class constructor of DemoTfListener");
-    tfListener_ = new tf::TransformListener;  //create a transform listener and assign its pointer
-    //here, the tfListener_ is a pointer to this object, so must use -> instead of "." operator
-    //somewhat more complex than creating a tf_listener in "main()", but illustrates how
-    // to instantiate a tf_listener within a class
+    tfListener_ = new tf::TransformListener;  //create a transform listener a
     
-    // wait to start receiving valid tf transforms between base_link and link2:
-    // this example is specific to our mobot, which has a base_link and a link2
-    // lookupTransform will through errors until a valid chain has been found from target to source frames
     bool tferr=true;
     ROS_INFO("waiting for tf between link2 and base_link...");
     tf::StampedTransform tfLink2WrtBaseLink; 
     while (tferr) {
         tferr=false;
         try {
-                //try to lookup transform, link2-frame w/rt base_link frame; this will test if
-            // a valid transform chain has been published from base_frame to link2
-                tfListener_->lookupTransform("base_link", "link2", ros::Time(0), tfLink2WrtBaseLink);
+
+	  tfListener_->lookupTransform("base_link", "link2", ros::Time(0), tfLink2WrtBaseLink);
             } catch(tf::TransformException &exception) {
                 ROS_WARN("%s; retrying...", exception.what());
                 tferr=true;
@@ -80,8 +73,11 @@ geometry_msgs::PoseStamped DemoTfListener::get_pose_from_transform(tf::StampedTr
 // returns false if the two frames are inconsistent as sequential transforms
 // returns true if consistent A_stf and B_stf transforms, and returns result of multiply in C_stf
 // The reference frame and child frame are populated in C_stf accordingly
-bool DemoTfListener::multiply_stamped_tfs(tf::StampedTransform A_stf, 
-        tf::StampedTransform B_stf, tf::StampedTransform &C_stf) {
+bool DemoTfListener::multiply_stamped_tfs(
+					  tf::StampedTransform A_stf, 
+					  tf::StampedTransform B_stf,
+					  tf::StampedTransform &C_stf) {
+  
    tf::Transform A,B,C; //simple transforms--not stamped
   std::string str1 (A_stf.child_frame_id_); //want to compare strings to check consistency
   std::string str2 (B_stf.frame_id_);
@@ -93,11 +89,15 @@ bool DemoTfListener::multiply_stamped_tfs(tf::StampedTransform A_stf,
    //if here, the named frames are logically consistent
    A = get_tf_from_stamped_tf(A_stf); // get the transform from the stamped transform
    B = get_tf_from_stamped_tf(B_stf);
-   C = A*B; //multiplication is defined for transforms 
+   
+   C = A*B; //multiplication is defined for transforms
+   
    C_stf.frame_id_ = A_stf.frame_id_; //assign appropriate parent and child frames to result
    C_stf.child_frame_id_ = B_stf.child_frame_id_;
+   
    C_stf.setOrigin(C.getOrigin()); //populate the origin and orientation of the result
    C_stf.setBasis(C.getBasis());
+   
    C_stf.stamp_ = ros::Time::now(); //assign the time stamp to current time; 
      // alternatively, could assign this to the OLDER of A or B transforms
    return true; //if got here, the multiplication is valid
